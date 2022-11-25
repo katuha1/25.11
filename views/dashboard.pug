@@ -1,0 +1,39 @@
+doctype html
+head
+  meta(charset='utf-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1')
+  title Kanben Board
+  link(rel='stylesheet', href='style.css')
+
+body
+  div.header Доска
+  div.container
+    div.column
+      div.head Выполнить
+      a.addtask(href='#openModal') + Add Task
+      #openModal.modalDialog
+        div.modal-top
+          h2 Добавить задачу
+          a.close(href='#close' title='Закрыть')
+            svg.icon.icon-tabler.icon-tabler-x(xmlns='http://www.w3.org/2000/svg', width='24', height='24', viewBox='0 0 24 24', stroke-width='2', stroke='currentColor', fill='none', stroke-linecap='round', stroke-linejoin='round')
+              path(stroke='none', d='M0 0h24v24H0z', fill='none')
+              line(x1='18', y1='6', x2='6', y2='18')
+              line(x1='6', y1='6', x2='18', y2='18')
+        form(method='post', action='/login')
+          input(required type='name', name="taskName", placeholder='Название задачи')
+          textarea.desc(required type='name', name="description", placeholder="Описание")
+          input(required type='date', name="datetask", placeholder="Дата")
+          input(required type='name', name="author", placeholder="Автор")
+          div.modal-bottom
+            button.install Сохранить
+      div.block
+        p#task а
+        p#description б
+        p#date_task в
+        p#author_task г
+    div.column
+      div.head В работе
+    div.column
+      div.head Завершено
+  div.footer 2022 © Katuha Prod.
+html 
