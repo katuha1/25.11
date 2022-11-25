@@ -53,22 +53,7 @@ app.post('/dashboard', urlencodedParser, function (request, response) {
 
 /* app.post('/login', function(request, response, next) {
 	let req = request.body;
-	
-	// Запись в файл пиши здесь
-	
-	
-	// Посмотри вывод в консоли
 	console.log(req)
-	
-	// Нужно записывать в словарь.
-	// Пример: 
-	// {
-	//	1: {taskName: '', description: '', datetask: '', author: ''}, 
-	// 	2: {taskName: '', description: '', datetask: '', author: ''},
-	// 	3: {taskName: '', description: '', datetask: '', author: ''}
-	// }
-	// Номер записки: Данные записки
-	
 	next();
 }, (request, response) => {
   response.render('dashboard');
