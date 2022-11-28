@@ -3,14 +3,14 @@ head
   meta(charset='utf-8')
   meta(name='viewport', content='width=device-width, initial-scale=1')
   title Kanben Board
-  link(rel='stylesheet', href='style.css')
+  link(rel='stylesheet', href='/css/style.css')
 
 body
-  div.header Доска
+  div.flex-center.header Доска
   div.container
     div.column
       div.head Выполнить
-      a.addtask(href='#openModal') + Add Task
+      a.flex-center.add-task(href='#openModal') + Add Task
       #openModal.modalDialog
         div.modal-top
           h2 Добавить задачу
@@ -19,21 +19,29 @@ body
               path(stroke='none', d='M0 0h24v24H0z', fill='none')
               line(x1='18', y1='6', x2='6', y2='18')
               line(x1='6', y1='6', x2='18', y2='18')
-        form(method='post', action='/dashboard')
-          input(required type='name', name="taskName", placeholder='Название задачи')
-          textarea.desc(required type='name', name="description", placeholder="Описание")
-          input(required type='date', name="datetask", placeholder="Дата")
+        form.AddTask(method='post', action='/dashboard/addtask')
+          input(required type='name', name="head", placeholder='Название задачи')
+          textarea.desc(required type='name', name="desc", placeholder="Описание")
+          input(required type='date', name="date", placeholder="Дата")
           input(required type='name', name="author", placeholder="Автор")
           div.modal-bottom
             button.install Сохранить
-      div.block
-        p#task а
-        p#description б
-        p#date_task в
-        p#author_task г
+      each value in listTask
+        if value.statusTask == 'wait'
+          div.block(id=`id_${value.task_id}`)
+            div.block-top
+              div.flex-center.task-id #{value.task_id}
+              div.task-head #{value.head}
+            div.block-center
+              div.task-desc #{value.description}
+            div.block-bottom
+              button.wait Добавить в работу
+              form(action=`/dashboard/deletetask/${value.task_id}` method='post')
+                button.complet(id=`id_${value.task_id}`) Завершить
     div.column
       div.head В работе
+        
     div.column
       div.head Завершено
+        
   div.footer 2022 © Katuha Prod.
-html 
