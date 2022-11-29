@@ -1,0 +1,41 @@
+doctype html
+head
+	meta(charset='utf-8')
+	meta(name='viewport', content='width=device-width, initial-scale=1')
+	link(rel='stylesheet', href='/css/style.css')
+
+body
+	.header.flex-center Доска
+	.head-column
+	.container
+		.col-1
+			.head Выполнить
+				a.btn-addtask(href='#openModal') +
+			#openModal.modalDialog
+				div.modal-top
+					h2 Добавить задачу
+					a.close(href='#close' title='Закрыть') +
+				form.AddTask(method='post', action='/dashboard/addtask')
+					input(required type='name', name="head", placeholder='Название задачи')
+					textarea.desc(required type='name', name="desc", placeholder="Описание")
+					input(required type='date', name="date", placeholder="Дата")
+					input(required type='name', name="author", placeholder="Автор")
+					div.modal-bottom
+						button.saveData Сохранить
+			.col-2
+				each value in listTask
+					if value.statusTask == 'wait'
+						.block(id=`id_${value.task_id}`)
+							.block-top
+								.task-id #{value.task_id}
+								.task-head #{value.head}
+							.block-center #{value.description}
+							.block-bottom
+								form(action=`/dashboard/deletetask/${value.task_id}` method='post')
+									button.next-step(id=`id_${value.task_id}`) Завершить
+		.col-1
+			.head В работе
+			.col-2
+		.col-1
+			.head Завершить
+			.col-2

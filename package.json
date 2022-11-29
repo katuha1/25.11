@@ -1,0 +1,26 @@
+{
+  "name": "dashboard",
+  "version": "0.0.0",
+  "description": "tet",
+  "main": "index.js",
+  "homepage": "",
+  "author": "",
+  "scripts": {
+    "install": "npm install ",
+    "start": "node server",
+    "server": "nodemon index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonfile": "^6.1.0",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "logger-service": "^1.0.2",
+    "nodemon": "^2.0.20"
+  },
+  "license": "ISC"
+}
