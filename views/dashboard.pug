@@ -5,10 +5,10 @@ head
 	link(rel='stylesheet', href='/css/style.css')
 
 body
-	.header.flex-center Доска
+	.header.flex-center Доска (Блоки можно двигать)
 	.head-column
 	.container
-		.col-1
+		.col-1#field_1(ondragenter='dragEnter(event)', ondrop='dragDrop(event)', ondragover='dragOver(event)')
 			.head Выполнить
 				a.btn-addtask(href='#openModal') +
 			#openModal.modalDialog
@@ -25,7 +25,7 @@ body
 			.col-2
 				each value in listTask
 					if value.statusTask == 'wait'
-						.block(id=`id_${value.task_id}`)
+						.block(id=`id_${value.task_id}`, draggable='true', ondragstart='dragStart(event)')
 							.block-top
 								.task-id #{value.task_id}
 								.task-head #{value.head}
@@ -33,9 +33,32 @@ body
 							.block-bottom
 								form(action=`/dashboard/deletetask/${value.task_id}` method='post')
 									button.next-step(id=`id_${value.task_id}`) Завершить
-		.col-1
+		.col-1#field_2(ondragenter='dragEnter(event)', ondrop='dragDrop(event)', ondragover='dragOver(event)')
 			.head В работе
 			.col-2
-		.col-1
+				each value in listTask
+					if value.statusTask == 'work'
+						.block(id=`id_${value.task_id}`, draggable='true', ondragstart='dragStart(event)')
+							.block-top
+								.task-id #{value.task_id}
+								.task-head #{value.head}
+							.block-center #{value.description}
+							.block-bottom
+								form(action=`/dashboard/deletetask/${value.task_id}` method='post')
+									button.next-step(id=`id_${value.task_id}`) Завершить
+		.col-1#field_3(ondragenter='dragEnter(event)', ondrop='dragDrop(event)', ondragover='dragOver(event)')
 			.head Завершить
 			.col-2
+				each value in listTask
+					if value.statusTask == 'complet'
+						.block(id=`id_${value.task_id}`, draggable='true', ondragstart='dragStart(event)')
+							.block-top
+								.task-id #{value.task_id}
+								.task-head #{value.head}
+							.block-center #{value.description}
+							.block-bottom
+								form(action=`/dashboard/deletetask/${value.task_id}` method='post')
+									button.next-step(id=`id_${value.task_id}`) Завершить
+	
+	script
+		include js/main.js

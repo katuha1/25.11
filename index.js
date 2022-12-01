@@ -21,11 +21,11 @@ app.use(express.static("views"));
 // ---
 
 const JsonFile = path.join(__dirname, "/data.json")
+const work_status = {1: "wait", 2: "work", 3: "complet"}
 
 function parameters() {
   return {listTask: jsonfile.readFileSync(JsonFile)}
 }
-
 
 app.post('/dashboard/addtask', urlencodedParser, (request, response) => {
   if (!request.body) return response.sendStatus(400)
@@ -65,8 +65,23 @@ app.post('/dashboard/deletetask/:id', (request, response) => {
 });
 
 
+app.post('/api/add', function (request, response) {
+	jsonfile.readFile(JsonFile, (error, object) => {
+		if (error) throw error
+		for(let i = 0; i < object.length; i++) {
+			if (object[i].task_id == request.body.block_id) {
+				object[i]["statusTask"] = work_status[request.body.field];
+			}
+		}
+		jsonfile.writeFile(JsonFile, object, { spaces: 2 }, (error) => {
+			if (error) throw error;
+		});
+	});
+	response.send("ok");
+});
+
 app.get('/dashboard', function (request, response) {
-  response.render('dashboard', parameters())
+	response.render('dashboard', parameters());
 })
 
 // ---
