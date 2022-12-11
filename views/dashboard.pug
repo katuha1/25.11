@@ -3,88 +3,62 @@ head
 	meta(charset='utf-8')
 	meta(name='viewport', content='width=device-width, initial-scale=1')
 	link(rel='stylesheet', href='/css/style.css')
-	link(rel='icon' href='/images/icon.png')
-	title Dashboard
 
 body
-	.header
-		a.btn-header
-			<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-category" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-				<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-				<path d="M4 4h6v6h-6z"></path>
-				<path d="M14 4h6v6h-6z"></path>
-				<path d="M4 14h6v6h-6z"></path>
-				<circle cx="17" cy="17" r="3"></circle>
-			</svg>
-		.logo-header.cf Dashboard
-		a.btn-header
-			<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-				<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-				<line x1="12" y1="5" x2="12" y2="19"></line>
-				<line x1="5" y1="12" x2="19" y2="12"></line>
-			</svg>
-		a.btn-header
-			<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bell" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-				<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-				<path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"></path>
-				<path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
-			</svg>
-		img(src='images/ava.png')
-	
+	.header.flex-center Доска (Блоки можно двигать)
+	.head-column
 	.container
-		.header-column
-		.page
-			.head-page
-				.name-desk.cf Название доски
-				.table-people
-					img.img-people(src='/images/ava.png')
-					img.img-people(src='/images/ava.png')
-					img.img-people(src='/images/ava.png')
-					#all-user.icon-count.img-people.cf 5
-			.content-page
-				.column-page#field_1(ondragenter='dragEnter(event)', ondrop='dragDrop(event)', ondragover='dragOver(event)')
-					.head-column-page.cf В ожидании
-						a.add-task(href="#OpenModalWindow") +
-					each value in Task
-						if value.task_status == 'wait'
-							.block-task(id=`id_${value.task_id}`, draggable='true', ondragstart='dragStart(event)')
-								.head-block #{value.task_name}
-								.body-block #{value.task_description}
-								.bottom-block
-									div #{value.task_author}
-									div#date #{value.task_date}
-				.column-page#field_2(ondragenter='dragEnter(event)', ondrop='dragDrop(event)', ondragover='dragOver(event)')
-					.head-column-page.cf В работе
-					each value in Task
-						if value.task_status == 'active'
-							.block-task(id=`id_${value.task_id}`, draggable='true', ondragstart='dragStart(event)')
-								.head-block #{value.task_name}
-								.body-block #{value.task_description}
-								.bottom-block
-									div #{value.task_author}
-									div#date #{value.task_date}
-				.column-page#field_3(ondragenter='dragEnter(event)', ondrop='dragDrop(event)', ondragover='dragOver(event)')
-					.head-column-page.cf Завершено
-						form(action=`/dashboard/removetask` method='post')
-							button.remove-task.cf Завершить
-					each value in Task
-						if value.task_status == 'complet'
-							.block-task(id=`id_${value.task_id}`, draggable='true', ondragstart='dragStart(event)')
-								.head-block #{value.task_name}
-								.body-block #{value.task_description}
-								.bottom-block
-									div #{value.task_author}
-									div#date #{value.task_date}
-	#OpenModalWindow.ModalWindow
-		.modal-head Добавьте задачу
-			a.close(href="#close") +
-		form.modal-center(method='post', action='/dashboard/addtask')
-			input(required type='name', name="head", placeholder='Название задачи')
-			textarea.desc(required type='name', name="desc", placeholder="Описание")
-			input(required type='date', name="date", placeholder="Дата")
-			input(required type='name', name="author", placeholder="Автор")
-			button.saveData(href="#close") Save
+		.col-1#field_1(ondragenter='dragEnter(event)', ondrop='dragDrop(event)', ondragover='dragOver(event)')
+			.head Выполнить
+				a.btn-addtask(href='#openModal') +
+			#openModal.modalDialog
+				div.modal-top
+					h2 Добавить задачу
+					a.close(href='#close' title='Закрыть') +
+				form.AddTask(method='post', action='/dashboard/addtask')
+					input(required type='name', name="head", placeholder='Название задачи')
+					textarea.desc(required type='name', name="desc", placeholder="Описание")
+					input(required type='date', name="date", placeholder="Дата")
+					input(required type='name', name="author", placeholder="Автор")
+					div.modal-bottom
+						button.saveData Сохранить
+			.col-2
+				each value in listTask
+					if value.statusTask == 'wait'
+						.block(id=`id_${value.task_id}`, draggable='true', ondragstart='dragStart(event)')
+							.block-top
+								.task-id #{value.task_id}
+								.task-head #{value.head}
+							.block-center #{value.description}
+							.block-bottom
+								form(action=`/dashboard/deletetask/${value.task_id}` method='post')
+									button.next-step(id=`id_${value.task_id}`) Завершить
+		.col-1#field_2(ondragenter='dragEnter(event)', ondrop='dragDrop(event)', ondragover='dragOver(event)')
+			.head В работе
+			.col-2
+				each value in listTask
+					if value.statusTask == 'work'
+						.block(id=`id_${value.task_id}`, draggable='true', ondragstart='dragStart(event)')
+							.block-top
+								.task-id #{value.task_id}
+								.task-head #{value.head}
+							.block-center #{value.description}
+							.block-bottom
+								form(action=`/dashboard/deletetask/${value.task_id}` method='post')
+									button.next-step(id=`id_${value.task_id}`) Завершить
+		.col-1#field_3(ondragenter='dragEnter(event)', ondrop='dragDrop(event)', ondragover='dragOver(event)')
+			.head Завершить
+			.col-2
+				each value in listTask
+					if value.statusTask == 'complet'
+						.block(id=`id_${value.task_id}`, draggable='true', ondragstart='dragStart(event)')
+							.block-top
+								.task-id #{value.task_id}
+								.task-head #{value.head}
+							.block-center #{value.description}
+							.block-bottom
+								form(action=`/dashboard/deletetask/${value.task_id}` method='post')
+									button.next-step(id=`id_${value.task_id}`) Завершить
 	
 	script
 		include js/main.js
-		include js/dragdropblocks.js
